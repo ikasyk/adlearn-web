@@ -1,0 +1,14 @@
+.learn-test-wrap {
+  width: 100%;
+
+  .learn-test-unit {
+    font-size: 22px;
+    border-bottom: 1px solid #d0c9e2;
+    padding: 15px;
+
+  }
+  .learn-test-unit.unit-chosen {
+    border-bottom-color: #7e56c1;
+  }
+
+}

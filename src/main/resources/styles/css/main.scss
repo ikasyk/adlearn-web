@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&subset=cyrillic,cyrillic-ext,latin-ext');
+
+body {
+  font-family: Roboto, sans-serif;
+}
+
+body.image-wrap {
+  background: #333 url(/built/images/bg/home-wallpaper.png) no-repeat fixed center center;
+  background-size: cover;
+}
+
+.navbar-default {
+  background: #7e56c1;
+  border: none;
+  border-radius: 0;
+
+  .navbar-brand, .navbar-nav > li > a {
+    color: #FFF;
+  }
+
+  .navbar-brand:hover, .navbar-nav > li > a:hover {
+    color: #FFF;
+  }
+
+  .navbar-brand {
+    font-size: 1.6em;
+    height: 70px;
+    padding: 30px 15px;
+  }
+
+  .navbar-nav > li > a {
+    font-size: 1.2em;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+}
+
+.navbar-default.navbar-transparent {
+  background: transparent;
+}
