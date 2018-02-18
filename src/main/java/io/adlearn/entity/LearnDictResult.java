@@ -21,4 +21,12 @@ public class LearnDictResult {
     @JoinColumn(name = "learn_data_id")
     @JsonIgnore
     private UserLearnData learnData;
+
+    @Override
+    public String toString() {
+        return "LearnDictResult{" +
+                "id=" + id +
+                ", connections=" + connections +
+                '}';
+    }
 }

@@ -22,4 +22,13 @@ public class LearnDictResultConnection {
     private LearnDataDictEntry entry;
 
     private boolean value;
+
+    @Override
+    public String toString() {
+        return "LearnDictResultConnection{" +
+                "id=" + id +
+                ", entry=" + entry +
+                ", value=" + value +
+                "}\n";
+    }
 }

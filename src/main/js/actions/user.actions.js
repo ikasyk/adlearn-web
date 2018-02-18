@@ -1,6 +1,5 @@
 import axios from "axios";
 import queryString from 'query-string';
-import Cookies from "js-cookie";
 
 import { userConst } from "../constants";
 
@@ -65,11 +64,7 @@ function login(username, password) {
         }).then(response => {
             const data = response.data;
 
-            const cookieOpts = {
-                expires: data.expires_in / (3600 * 24),
-                path: '/'
-            };
-            Cookies.set('auth-token', data.access_token, cookieOpts);
+            localStorage.setItem('auth_token', data.access_token);
 
             dispatch(success(data));
 

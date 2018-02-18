@@ -19,7 +19,7 @@ class App extends React.Component {
     componentWillMount() {
         let accessToken;
 
-        if (accessToken = Cookies.get('auth-token')) {
+        if (accessToken = localStorage.getItem('auth_token')) {
             this.props.dispatch(userActions.authenticate(accessToken));
         } else {
             this.props.dispatch(userActions.authenticate(null));

@@ -9,7 +9,8 @@ export function login(state = {}, action) {
             };
             break;
         case userConst.LOGIN_FAILED:
-            return {};
+            return {
+            };
             break;
         default:
             return state;

@@ -23,4 +23,11 @@ public class LearnDataDictEntry {
     @OrderColumn(name = "unit_order")
     private List<LearnDataDictUnit> units;
 
+    @Override
+    public String toString() {
+        return "LearnDataDictEntry{" +
+                "id=" + id +
+                ", units=" + units +
+                "}\n";
+    }
 }

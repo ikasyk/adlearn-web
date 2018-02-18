@@ -18,4 +18,12 @@ public class LearnDataDictUnit {
     private LearnDataDictEntry entry;
 
     private String content;
+
+    @Override
+    public String toString() {
+        return "LearnDataDictUnit{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

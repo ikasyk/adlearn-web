@@ -1,41 +1,27 @@
 import React from "react";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
+import { Field, reduxForm } from 'redux-form'
+// import {renderTextField} from '../helpers/renderField'
 
-import {connect} from "react-redux";
 import {userActions} from "../actions/user.actions";
-import { form, control, button } from 'react-validation';
 
-const required = (value) => {
-    if (value.toString().trim().length === 0)
-        return "Required";
-    return false;
+const renderTextField = ({input, label, type, meta: {touched, error}}) => {
+    return <TextField {...input} floatingLabelText={label} errorText={touched && error} type={type} fullWidth={true}/>
 };
 
-const FormValid = ({getValues, validate, validateAll, showError, hideError, children, ...props}) => {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        validateAll();
-        props.submit(getValues());
-    };
-    return <form {...props} onSubmit={handleSubmit}>{children}</form>
+const validateLogin = (values) => {
+    const errors = {};
+    if (!values.username) {
+        errors.username = "Required";
+    }
+
+    if (!values.password) {
+        errors.password = "Required";
+    }
+
+    return errors;
 };
-
-const TextFieldValid = ({error, isChanged, isUsed, ...props}) => {
-    return <TextField errorText={isUsed && error} {...props}/>
-};
-
-const ButtonSubmitValid = ({hasErrors, ...props}) => {
-    const handleClick = () => {
-        if (!hasErrors) props.sendForm();
-    };
-    return <RaisedButton type='submit' {...props} onClick={handleClick}/>
-};
-
-const Form = form(FormValid);
-const Input = control(TextFieldValid);
-const Button = button(ButtonSubmitValid);
-
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -43,36 +29,30 @@ class LoginForm extends React.Component {
         this.state = {};
     }
 
-    handleSubmit({username, password}) {
-        this.props.dispatch(userActions.login(username, password));
-    }
-
     render() {
-        const handleSubmit = this.handleSubmit.bind(this);
+        const {handleSubmit} = this.props;
 
         return (
-            <section id="login-form-wrap">
-                <h3>Sign In</h3>
-                <Form submit={handleSubmit}>
-                    <Input floatingLabelText="User Name" fullWidth={true} name="username"
-                                    validations={[required]}/>
-                    <Input floatingLabelText="Password" type="password" fullWidth={true} name="password"
-                                    validations={[required]}/>
-                    <br/><br/>
-                    <Button label="SIGN IN" primary={true}/>
-                </Form>
-            </section>
+            <form onSubmit={handleSubmit}>
+                <Field name="username"
+                       component={renderTextField}
+                       label="User Name"/>
+                <Field name="password"
+                       component={renderTextField}
+                       type="password"
+                       label="Password"/>
+                <br/><br/>
+                <RaisedButton label="SIGN IN" primary={true} type="submit"/>
+            </form>
         )
     }
 }
 
-function mapStateToProps(state) {
-    const {login} = state;
-    return {
-        login
-    }
-}
 
-const connectedLoginForm = connect(mapStateToProps)(LoginForm);
+const renderedForm = reduxForm({
+    form: 'login',
+    validate: validateLogin,
+})(LoginForm);
 
-export {connectedLoginForm as LoginForm};
+
+export {renderedForm as LoginForm};

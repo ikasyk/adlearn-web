@@ -1,5 +1,5 @@
 import React from 'react';
-import { TopNavbar, LoginForm, SignUpForm } from './';
+import { TopNavbar, LoginFormWrap, SignUpFormWrap } from './';
 import $ from 'jquery';
 import {Route, Switch} from "react-router-dom";
 
@@ -11,8 +11,8 @@ class Authorization extends React.Component {
             <div>
                 <TopNavbar transparent={true} />
                 <Switch>
-                    <Route exact path="/" component={LoginForm}/>
-                    <Route path="/sign-up" component={SignUpForm}/>
+                    <Route exact path="/" component={LoginFormWrap}/>
+                    <Route path="/sign-up" component={SignUpFormWrap}/>
                 </Switch>
             </div>
         );

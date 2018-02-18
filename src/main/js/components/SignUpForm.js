@@ -1,88 +1,79 @@
 import React from "react";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
+import { Field, reduxForm } from 'redux-form'
 
-import axios from "axios";
-import {connect} from "react-redux";
-import {userActions} from "../actions/user.actions";
+const renderTextField = ({input, label, type, meta: {touched, error}}) => {
+    return <TextField {...input} floatingLabelText={label} errorText={touched && error} type={type} fullWidth={true}/>
+};
+
+const validateRegistration = (values) => {
+    const errors = {};
+
+    if (!values.login) {
+        errors.login = "Required";
+    } else if (values.login.length < 4) {
+        errors.login = "Login is too short. It must be consist minimum of 4 characters."
+    } else if (/[^0-9a-z]/i.test(values.login)) {
+        errors.login = "Login must contains only letters, numbers and underline _."
+    }
+
+    if (!values.email) {
+        errors.email = "Required";
+    } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.email)) {
+        errors.email = "E-mail is not valid.";
+    }
+
+    if (!values.password) {
+        errors.password = "Required";
+    } else if (values.password.length < 6) {
+        errors.password = "Password is too short. It must be consist minimum of 6 characters."
+    }
+
+    if (!values.confirmPassword) {
+        errors.confirmPassword = "Required";
+    } else if (values.confirmPassword !== values.password) {
+        errors.confirmPassword = "Passwords are not match."
+    }
+
+    return errors;
+};
 
 class SignUpForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isSuccess: false,
-            login: null,
-            password: null
-        };
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-
-        const target = event.target;
-
-
-        axios({
-            method: 'post',
-            url: '/api/user/registration',
-            data: {
-                login: target.login.value,
-                email: target.email.value,
-                password: target.password.value,
-                confirmPassword: target.confirmPassword.value
-            }
-        }).then(response => {
-            if (response.status === 200) {
-                this.setState({
-                    isSuccess: true,
-                    login: target.login.value,
-                    password: target.password.value
-                });
-            }
-        });
-    }
-
-    handleLogin() {
-        this.props.dispatch(userActions.login(this.state.login, this.state.password));
+        this.state = {};
     }
 
     render() {
-        const handleSubmit = this.handleSubmit.bind(this);
-        const handleLogin = this.handleLogin.bind(this);
-console.log(this.state);
+        const {handleSubmit} = this.props;
+
         return (
-            <section id="login-form-wrap">
-                <h3>Sign Up</h3>
-                {!this.state.isSuccess ?
-                    <form onSubmit={handleSubmit}>
-                        <TextField floatingLabelText="User Name" fullWidth={true} name="login"/>
-                        <TextField floatingLabelText="Email" fullWidth={true} name="email"/>
-                        <TextField floatingLabelText="Password" type="password" fullWidth={true} name="password"/>
-                        <TextField floatingLabelText="Repeat Password" type="password" fullWidth={true}
-                                   name="confirmPassword"/>
-                        <br/><br/>
-                        <RaisedButton label="SIGN UP" type="submit" primary={true}/>
-                    </form>
-                    :
-                    <div>
-                        <p>Your account is created. You can login using your login and password.</p>
-                        <br/><br/>
-                        <RaisedButton label={"Login as " + this.state.login} primary={true} onClick={handleLogin}/>
-                    </div>
-                }
-            </section>
-        )
+            <form onSubmit={handleSubmit}>
+                <Field name="login"
+                       component={renderTextField}
+                       label="User Name"/>
+                <Field name="email"
+                       component={renderTextField}
+                       label="E-mail"/>
+                <Field name="password"
+                       component={renderTextField}
+                       type="password"
+                       label="Password"/>
+                <Field name="confirmPassword"
+                       type="password"
+                       component={renderTextField}
+                       label="Confirm Password"/>
+                <br/><br/>
+                <RaisedButton label="SIGN UP" type="submit" primary={true}/>
+            </form>
+        );
     }
 }
 
+const renderedForm = reduxForm({
+    form: 'signUp',
+    validate: validateRegistration
+})(SignUpForm);
 
-function mapStateToProps(state) {
-    const {login} = state;
-    return {
-        login
-    }
-}
-
-const connectedSignUpForm = connect(mapStateToProps)(SignUpForm);
-
-export { connectedSignUpForm as SignUpForm };
+export {renderedForm as SignUpForm};
